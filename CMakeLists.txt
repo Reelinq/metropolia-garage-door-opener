@@ -12,6 +12,12 @@ pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
 	main.cpp
+	devices/Stepper.cpp
+	devices/Stepper.h
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+	devices
 )
 
 target_link_libraries(${PROJECT_NAME}
