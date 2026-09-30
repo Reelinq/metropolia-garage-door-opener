@@ -14,6 +14,8 @@ add_executable(${PROJECT_NAME}
 	main.cpp
 	devices/Stepper.cpp
 	devices/Stepper.h
+	devices/RotaryEncoder.cpp
+	devices/RotaryEncoder.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -21,7 +23,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}
-	pico_stdlib
+	pico_stdlib pico_util hardware_gpio
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})
