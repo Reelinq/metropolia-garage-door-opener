@@ -16,6 +16,8 @@ add_executable(${PROJECT_NAME}
 	devices/Stepper.h
 	devices/RotaryEncoder.cpp
 	devices/RotaryEncoder.h
+	devices/LimitSwitch.cpp
+	devices/LimitSwitch.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
