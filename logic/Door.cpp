@@ -1,12 +1,12 @@
 #include "Door.h"
 
-void Door::on_motor_step(int dir) { pos += dir; }
-void Door::set_position(int steps) { pos = steps;}
+void Door::on_movement(int ticks) { pos += ticks; }
+void Door::set_position(int ticks) { pos = ticks; }
 
-void Door::set_calibrated(bool calibrated, int steps) {
+void Door::set_calibrated(bool calibrated, int ticks) {
 	if (calibrated) {
 		cal = CalibrationState::Calibrated;
-		total = steps;
+		total = ticks;
 		err = DoorError::Normal;
 	} else {
 		cal = CalibrationState::NotCalibrated;
@@ -23,7 +23,7 @@ void Door::set_error(DoorError e) {
 
 DoorState Door::state() const {
 	if (cal != CalibrationState::Calibrated) {
-		return DoorState::InBetween;
+		return DoorState::InBetween; // position unknown
 	}
 	if (pos <= 0) {
 		return DoorState::Closed;
@@ -37,4 +37,4 @@ DoorState Door::state() const {
 DoorError Door::error() const { return err; }
 CalibrationState Door::calibration() const { return cal; }
 int Door::position() const { return pos; }
-int Door::total_steps() const { return total; }
+int Door::total_ticks() const { return total; }
