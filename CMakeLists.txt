@@ -18,6 +18,8 @@ add_executable(${PROJECT_NAME}
 	devices/RotaryEncoder.h
 	devices/LimitSwitch.cpp
 	devices/LimitSwitch.h
+	logic/Door.cpp
+	logic/Door.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
