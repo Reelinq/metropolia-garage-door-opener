@@ -37,3 +37,26 @@ void Stepper::motor_set(const uint8_t levels[MOTOR_PIN_COUNT]) {
 		gpio_put(motor_pins[i], levels[i]);
 	}
 }
+
+void Stepper::start(int dir) {
+	if (dir == 0) {
+		stop();
+		return;
+	}
+	move_dir = (dir > 0) ? +1 : -1;
+}
+
+void Stepper::stop() {
+	off();
+	move_dir = 0;
+}
+ 
+void Stepper::update() {
+	if (move_dir != 0) {
+		step(move_dir);
+	}
+}
+ 
+int Stepper::direction() const { return move_dir; }
+bool Stepper::moving() const { return move_dir != 0; }
+
