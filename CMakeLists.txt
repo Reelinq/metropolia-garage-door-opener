@@ -18,6 +18,8 @@ add_executable(${PROJECT_NAME}
 	devices/RotaryEncoder.h
 	devices/LimitSwitch.cpp
 	devices/LimitSwitch.h
+    devices/led.cpp
+    devices/led.h
 	logic/Door.cpp
 	logic/Door.h
 )
