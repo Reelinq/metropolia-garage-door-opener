@@ -1,4 +1,10 @@
+#include <stdio.h>
+#include "pico/stdlib.h"
+ 
 #include "Door.h"
+#include "LimitSwitch.h"
+#include "Stepper.h"
+#include "RotaryEncoder.h"
 
 void Door::on_movement(int ticks) { pos += ticks; }
 void Door::set_position(int ticks) { pos = ticks; }
@@ -61,7 +67,30 @@ bool Door::calibrate(const LimitSwitch& closed_sw, const LimitSwitch& open_sw,
 	printf("Calibration failed: encoder counted %d ticks while opening\r\n", ticks);
 	return false;
 }
+
+ int Door::next_direction(int current_dir) {
+	if (cal != CalibrationState::Calibrated) {
+		return 0;                      // not calibrated: door may not be moved
+	}
+	if (current_dir != 0) {
+		last_dir = current_dir;        // remember which way it was going
+		return 0;                      // moving -> stop
+	}
  
+	switch (state()) {
+		case DoorState::Closed:
+			last_dir = +1;
+			break;
+		case DoorState::Open:
+			last_dir = -1;
+			break;
+		default:                       // stopped midway: go the opposite way
+			last_dir = (last_dir == 0) ? +1 : -last_dir;
+			break;
+	}
+	return last_dir;
+}
+
 
 DoorState Door::state() const {
 	if (cal != CalibrationState::Calibrated) {

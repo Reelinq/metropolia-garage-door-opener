@@ -36,6 +36,15 @@ class Door {
 		// (the door stays not calibrated).
 		bool calibrate(const LimitSwitch& closed_sw, const LimitSwitch& open_sw,
 					   Stepper& stepper, RotaryEncoder& encoder);
+			// Local button (SW1) logic. current_dir: +1 opening, -1 closing, 0 stopped.
+		// Returns the new motor direction (+1, -1 or 0 = stop):
+		//   not calibrated -> 0 (door may not be moved)
+		//   moving         -> 0 (stop, remembers the direction it was moving)
+		//   closed         -> +1 (open)
+		//   open           -> -1 (close)
+		//   stopped midway -> opposite of the direction it was moving before
+		int next_direction(int current_dir);
+
 		DoorState state() const;
 		DoorError error() const;
 		CalibrationState calibration() const;
@@ -45,6 +54,7 @@ class Door {
 	private:
 		int pos = 0;
 		int total = 0;
+		int last_dir = 0; // last direction the door was moving (+1 opening, -1 closing)
 		CalibrationState cal = CalibrationState::NotCalibrated;
 		DoorError err = DoorError::Normal;
 };

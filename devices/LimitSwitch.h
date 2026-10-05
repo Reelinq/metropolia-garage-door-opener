@@ -2,6 +2,10 @@
 
 #include "pico/stdlib.h"
 
+#define CLOSED_SW_PIN 27
+#define OPEN_SW_PIN 28
+
+
 class LimitSwitch {
 	public:
 		LimitSwitch(uint pin);
