@@ -11,7 +11,7 @@ Led::Led(uint pin) : led_pin(pin) {
 //true sets error, false sets normal state
 void Led::SetError (bool error) {
 	errorstate = error;
-    blinkcounter = 0;
+	blinkcounter = 0;
 }
 
 //turns the led on if not error, if error starts blinking
