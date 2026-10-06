@@ -20,6 +20,8 @@ add_executable(${PROJECT_NAME}
 	devices/LimitSwitch.h
 	devices/led.cpp
 	devices/led.h
+	devices/Button.cpp
+	devices/Button.h
 	logic/Door.cpp
 	logic/Door.h
 	logic/Calibration.cpp
