@@ -4,10 +4,7 @@
 #include <stddef.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-
-#define EEPROM_PAGE_SIZE 64
-#define EEPROM_MAX_WRITE 32 // largest single write we accept
-#define EEPROM_WRITE_MS 5 // time the chip needs to finish an internal write
+#include "header.h"
 
 class Eeprom {
 	public:

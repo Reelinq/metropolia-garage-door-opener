@@ -44,9 +44,7 @@
 // Moved here from main.cpp.
 #define MOVE_WD_MS 2000
 
-
 //Stepper defines
-
 
 // Stepper motor driver pins (IN1..IN4)
 #define STEPPER_IN1_PIN 2
@@ -73,4 +71,9 @@
 #define ROT_A_PIN 4
 #define ROT_B_PIN 5
 
+//Eeprom defines
+
+#define EEPROM_PAGE_SIZE 64
+#define EEPROM_MAX_WRITE 32
+#define EEPROM_WRITE_MS 5 
 
