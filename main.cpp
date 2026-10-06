@@ -5,7 +5,12 @@
 #include "Controller.h"
 #include "Button.h"
 #include "Led.h"
+#include "Eeprom.h"
 
+
+#define EEPROM_SDA_PIN 16
+#define EEPROM_SCL_PIN 17
+#define EEPROM_I2C_ADDR 0x50
 
 static const char* state_name(DoorState s) {
 	switch (s) {

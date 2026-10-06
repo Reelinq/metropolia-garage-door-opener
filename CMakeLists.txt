@@ -23,6 +23,8 @@ add_executable(${PROJECT_NAME}
 	devices/Led.h
 	devices/Button.cpp
 	devices/Button.h
+	devices/Eeprom.cpp
+	devices/Eeprom.h
 	logic/Door.cpp
 	logic/Door.h
 	logic/Calibration.cpp
@@ -36,7 +38,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}
-	pico_stdlib pico_util hardware_gpio
+	pico_stdlib pico_util hardware_gpio hardware_i2c
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})
