@@ -45,44 +45,48 @@ int main() {
 		dir = 0;
 	};
 
-	while (true) {
-		if (sw0.pressed_with(sw2)) {
-			stop();
-
-			printf("Calibration started\r\n");
-			calibration.run();
-		}
-
-		int ticks = encoder.read_ticks();
-		if (ticks != 0) { door.on_movement(ticks); }
-
-		// TODO: Could be shortened into a function?
+	// Stops at the end switch in the direction of travel and re-syncs the position
+	auto check_limits = [&]() {
 		if (dir > 0 && open_sw.pressed()) {
 			stop();
 			door.set_position(door.total_ticks());
-		}
-		if (dir < 0 && closed_sw.pressed()) {
+		} else if (dir < 0 && closed_sw.pressed()) {
 			stop();
 			door.set_position(0);
 		}
+	};
 
-		// Move motor
+		while (true) {
+		// 1. Buttons
+		if (sw0.pressed_with(sw2)) {
+			stop();
+			calibration.run();
+		}
+
+		if (sw1.pressed()) {
+			dir = door.next_direction(dir);
+			if (dir == 0) {
+				stop();
+			}
+		}
+
+		// 2. Encoder: always read, also when stopped (the belt coasts after a stop)
+		int ticks = encoder.read_ticks();
+		if (ticks != 0) { door.on_movement(ticks); }
+
+		// 3. Limit switches
+		check_limits();
+
+		// 4. Move motor (one step, about 1 ms)
 		if (dir != 0) {
 			stepper.step(dir);
 		}
 
-		// Local button SW1
-		if (sw1.pressed()) {
-			if (door.calibration() != CalibrationState::Calibrated ||
-				dir != 0) {
-				// Not calibrated, or pressed while moving -> stop
-				stop();
-			} else if (door.state() == DoorState::Closed) {
-				dir = +1;
-			} else if (door.state() == DoorState::Open) {
-				dir = -1;
-			}
-			// TODO: stopped in between -> go the opposite way to the previous, (remember the last direction)?
+		// 5. Report state changes, only when they happen
+		DoorState now = door.state();
+		if (now != last_state) {
+			printf("Door: %s\r\n", state_name(now));
+			last_state = now;
 		}
 
 		// TODO: Stuck detection
