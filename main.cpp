@@ -5,6 +5,7 @@
 #include "RotaryEncoder.h"
 #include "LimitSwitch.h"
 #include "Door.h"
+#include "Button.h"
 
 #define ROT_A_PIN 10
 #define ROT_B_PIN 11
@@ -21,9 +22,6 @@
 #define STEPPER_IN3_PIN 6
 #define STEPPER_IN4_PIN 13
 
-// TODO: Class Button (debounce, one event per press) replaces this.
-#define BUTTON_PAUSE_MS 200
-
 int main() {
 	stdio_init_all();
 	sleep_ms(2000); //NOTE: Maybe not needed
@@ -35,13 +33,9 @@ int main() {
 	Door door;
 	int dir = 0; // motor direction: +1 opening, -1 closing, 0 stopped
 
-	// TODO: Class Button (SW0, SW1, SW2)
-	const uint buttons[] = {SW0_PIN, SW1_PIN, SW2_PIN};
-	for (uint pin : buttons) {
-		gpio_init(pin);
-		gpio_set_dir(pin, GPIO_IN);
-		gpio_pull_up(pin);
-	}
+	Button sw0(SW0_PIN);
+	Button sw1(SW1_PIN);
+	Button sw2(SW2_PIN);
 
 	// TODO: becomes Controller::stop()
 	auto stop = [&]() {
@@ -50,17 +44,11 @@ int main() {
 	};
 
 	while (true) {
-		bool sw0 = !gpio_get(SW0_PIN);
-		bool sw1 = !gpio_get(SW1_PIN);
-		bool sw2 = !gpio_get(SW2_PIN);
-
-		if (sw0 && sw2) {
+		if (sw0.pressed_with(sw2)) {
 			stop();
 
 			// TODO: Class Calibration
 			printf("Calibration started\r\n");
-
-			sleep_ms(BUTTON_PAUSE_MS);
 		}
 
 		int ticks = encoder.read_ticks();
@@ -82,7 +70,7 @@ int main() {
 		}
 
 		// Local button SW1
-		if (sw1) {
+		if (sw1.pressed()) {
 			if (door.calibration() != CalibrationState::Calibrated ||
 				dir != 0) {
 				// Not calibrated, or pressed while moving -> stop
@@ -93,8 +81,6 @@ int main() {
 				dir = -1;
 			}
 			// TODO: stopped in between -> go the opposite way to the previous, (remember the last direction)?
-
-			sleep_ms(BUTTON_PAUSE_MS);
 		}
 
 		// TODO: Stuck detection
