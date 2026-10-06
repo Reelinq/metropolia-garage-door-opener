@@ -7,6 +7,11 @@
 #include "Door.h"
 #include "Calibration.h"
 #include "Button.h"
+#include "led.h"
+
+#define LED0_PIN 20
+#define LED1_PIN 21
+#define LED2_PIN 22
 
 #define ROT_A_PIN 10
 #define ROT_B_PIN 11
@@ -39,10 +44,34 @@ int main() {
 	Button sw1(SW1_PIN);
 	Button sw2(SW2_PIN);
 
+	Led led_closed(LED0_PIN);
+	Led led_open(LED1_PIN);
+	Led led_status(LED2_PIN);
+
 	// TODO: becomes Controller::stop()
 	auto stop = [&]() {
 		stepper.off();
 		dir = 0;
+	};
+
+	// Maps door state to the three LEDs. Called every loop.
+	auto update_leds = [&]() {
+		DoorState s = door.state();
+		led_closed.set_mode(s == DoorState::Closed ? LedMode::On : LedMode::Off);
+		led_open.set_mode(s == DoorState::Open ? LedMode::On : LedMode::Off);
+
+		// Check Stuck first: a stuck door is also not calibrated
+		if (door.error() == DoorError::Stuck) {
+			led_status.set_mode(LedMode::Blink);
+		} else if (door.calibration() == CalibrationState::Calibrated) {
+			led_status.set_mode(LedMode::On);
+		} else {
+			led_status.set_mode(LedMode::Off);
+		}
+
+		led_closed.update();
+		led_open.update();
+		led_status.update();
 	};
 
 	// Stops at the end switch in the direction of travel and re-syncs the position
@@ -56,7 +85,9 @@ int main() {
 		}
 	};
 
-		while (true) {
+	update_leds();
+
+	while (true) {
 		// 1. Buttons
 		if (sw0.pressed_with(sw2)) {
 			stop();
@@ -93,6 +124,6 @@ int main() {
 
 		// TODO: Class Mqtt
 
-		// TODO: Class Led
+		update_leds();
 	}
 }
