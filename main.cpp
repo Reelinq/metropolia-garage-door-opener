@@ -29,7 +29,8 @@ int main() {
 	LimitSwitch closed_sw(CLOSED_SW_PIN);
 	LimitSwitch open_sw(OPEN_SW_PIN);
 	Door door;
-	Controller controller(door, stepper, encoder, closed_sw, open_sw);
+	Eeprom eeprom(i2c0, EEPROM_SDA_PIN, EEPROM_SCL_PIN, EEPROM_I2C_ADDR);
+	Controller controller(door, stepper, encoder, closed_sw, open_sw, eeprom);
 
 	Button sw0(SW0_PIN);
 	Button sw1(SW1_PIN);
