@@ -14,11 +14,15 @@ class Door {
 		void set_error(DoorError e);
 		int next_direction(int current_dir);
 
+		// Puts the door back into a calibrated state from saved data.
+		bool restore(int pos_in, int total_in, int dir_in);
+
 		DoorState state() const;
 		DoorError error() const;
 		CalibrationState calibration() const;
 		int position() const;
 		int total_ticks() const;
+		int last_direction() const;
 
 	private:
 		int pos = 0;
