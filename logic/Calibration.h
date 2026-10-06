@@ -11,7 +11,6 @@ class Calibration {
 	public:
 		Calibration(Door& door, Stepper& stepper, RotaryEncoder& encoder,
 			const LimitSwitch& closed_sw, const LimitSwitch& open_sw);
-
 		// Blocking. Returns true if the door is calibrated afterwards.
 		bool run();
 

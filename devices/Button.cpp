@@ -4,9 +4,8 @@ Button::Button(uint pin) : button_pin(pin) {
 	gpio_init(button_pin);
 	gpio_set_dir(button_pin, GPIO_IN);
 	gpio_pull_up(button_pin);
-	gpio_set_inover(button_pin, GPIO_OVERRIDE_INVERT); // gpio_get() is now true when pressed
-
-	held = gpio_get(button_pin); // a button already held at start-up is not a press
+	gpio_set_inover(button_pin, GPIO_OVERRIDE_INVERT); 
+	held = gpio_get(button_pin); 
 }
 
 void Button::sample() {

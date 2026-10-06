@@ -4,7 +4,7 @@
 class LimitSwitch {
 	public:
 		LimitSwitch(uint pin);
-		bool pressed() const; // true when the switch is closed
+		bool pressed() const;
 
 	private:
 		uint switch_pin;

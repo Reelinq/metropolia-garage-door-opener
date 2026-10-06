@@ -25,7 +25,7 @@ void Door::set_error(DoorError e) {
 
 int Door::next_direction(int current_dir) {
 	if (cal != CalibrationState::Calibrated) {
-		return 0;                      // not calibrated: door may not be moved
+		return 0;                      
 	}
 	if (current_dir != 0) {
 		last_dir = current_dir;        // remember which way it was going

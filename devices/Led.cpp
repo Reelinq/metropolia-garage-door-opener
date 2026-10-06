@@ -22,7 +22,7 @@ void Led::set_mode(LedMode m) {
 
 void Led::update() {
 	if (mode != LedMode::Blink) {
-		return; // Off and On need no timing
+		return; 
 	}
 	uint32_t now = to_ms_since_boot(get_absolute_time());
 	if (now - last_toggle_ms >= LED_BLINK_MS) {

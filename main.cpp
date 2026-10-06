@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include "pico/stdlib.h"
-
 #include "Stepper.h"
 #include "RotaryEncoder.h"
 #include "LimitSwitch.h"
@@ -9,24 +6,6 @@
 #include "Button.h"
 #include "Led.h"
 
-#define LED0_PIN 20
-#define LED1_PIN 21
-#define LED2_PIN 22
-
-#define ROT_A_PIN 4
-#define ROT_B_PIN 5
-
-#define CLOSED_SW_PIN 27
-#define OPEN_SW_PIN 28
-
-#define SW0_PIN 7
-#define SW1_PIN 8
-#define SW2_PIN 9
-
-#define STEPPER_IN1_PIN 2
-#define STEPPER_IN2_PIN 3
-#define STEPPER_IN3_PIN 6
-#define STEPPER_IN4_PIN 13
 
 static const char* state_name(DoorState s) {
 	switch (s) {

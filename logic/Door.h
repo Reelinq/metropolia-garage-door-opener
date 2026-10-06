@@ -10,7 +10,6 @@ class Door {
 	public:
 		void on_movement(int ticks); // call with the ticks read from the encoder
 		void set_position(int ticks);
-
 		void set_calibrated(bool calibrated, int ticks = 0); // ticks = distance between the two limit switches
 		void set_error(DoorError e);
 		int next_direction(int current_dir);

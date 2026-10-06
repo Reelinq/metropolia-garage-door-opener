@@ -1,7 +1,6 @@
 #pragma once
 #include "header.h"
 
-// Each row has MOTOR_PIN_COUNT columns (one for each pin).
 static const uint8_t HALF_STEP[HALF_STEP_COUNT][MOTOR_PIN_COUNT] = {
 	{1, 0, 0, 0},
 	{1, 1, 0, 0},

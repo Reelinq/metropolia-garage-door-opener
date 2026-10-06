@@ -1,6 +1,5 @@
 #include "Stepper.h"
 
-// Constructor: copies the pins into the object and sets them up.
 Stepper::Stepper(uint8_t in1, uint8_t in2, uint8_t in3, uint8_t in4)
 	: motor_pins{in1, in2, in3, in4}, step_index(0) {
 
@@ -17,7 +16,6 @@ void Stepper::off() {
 }
 
 void Stepper::step(int dir) {
-	// Go to the next row (or the previous one), wrapping around the table
 	if (dir > 0) {
 		step_index = (step_index + 1) % HALF_STEP_COUNT;
 	} else {
@@ -25,7 +23,7 @@ void Stepper::step(int dir) {
 	}
 
 	motor_set(HALF_STEP[step_index]);
-	sleep_ms(1); // Motor needs time to physically move
+	sleep_ms(1); 
 }
 
 void Stepper::motor_set(const uint8_t levels[MOTOR_PIN_COUNT]) {

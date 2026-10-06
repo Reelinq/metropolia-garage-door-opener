@@ -7,8 +7,6 @@ Controller::Controller(Door& door, Stepper& stepper, RotaryEncoder& encoder,
 	: door(door), stepper(stepper), encoder(encoder),
 	closed_sw(closed_sw), open_sw(open_sw),
 	calibration(door, stepper, encoder, closed_sw, open_sw) {
-
-	// Did the last reset come from a stuck door? Must run exactly once: it clears the marker.
 	if (encoder.caused_stuck_reset()) {
 		door.set_error(DoorError::Stuck); // also sets "not calibrated"
 		printf("Stuck reset detected\r\n");
@@ -17,7 +15,7 @@ Controller::Controller(Door& door, Stepper& stepper, RotaryEncoder& encoder,
 
 void Controller::stop() {
 	stepper.stop(); // pins off, direction 0
-	encoder.watchdog_stop(); // harmless if it is not running
+	encoder.watchdog_stop(); 
 }
 
 void Controller::start(int dir) {
@@ -35,18 +33,15 @@ void Controller::toggle() {
 }
 
 bool Controller::calibrate() {
-	stop(); // calibration drives the stepper itself
+	stop(); 
 	return calibration.run();
 }
 
 void Controller::update() {
-	// Always read, also when stopped: the belt coasts after a stop
 	int ticks = encoder.read_ticks_watched();
 	if (ticks != 0) { door.on_movement(ticks); }
-
 	check_limits();
-
-	stepper.update(); // one step if the direction is not 0
+	stepper.update(); 
 }
 
 void Controller::check_limits() {
