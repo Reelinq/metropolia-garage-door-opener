@@ -24,6 +24,8 @@ add_executable(${PROJECT_NAME}
 	logic/Door.h
 	logic/Calibration.cpp
 	logic/Calibration.h
+	logic/Controller.cpp
+	logic/Controller.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
