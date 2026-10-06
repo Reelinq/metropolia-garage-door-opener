@@ -28,6 +28,10 @@
 #define STEPPER_IN3_PIN 6
 #define STEPPER_IN4_PIN 13
 
+// Max time the motor may run without a single encoder tick before the door counts as stuck.
+// Must be longer than the time from motor start to the first tick. RP2040 maximum is ~8300 ms.
+#define MOVE_WD_MS 2000
+
 int main() {
 	stdio_init_all();
 	sleep_ms(2000); //NOTE: Maybe not needed
@@ -40,6 +44,12 @@ int main() {
 	Calibration calibration(door, stepper, encoder, closed_sw, open_sw);
 	int dir = 0; // motor direction: +1 opening, -1 closing, 0 stopped
 
+	// Did the last reset come from a stuck door? Call exactly once: it clears the marker.
+	if (encoder.caused_stuck_reset()) {
+		door.set_error(DoorError::Stuck);
+		printf("Stuck reset detected\r\n");
+	}
+
 	Button sw0(SW0_PIN);
 	Button sw1(SW1_PIN);
 	Button sw2(SW2_PIN);
@@ -48,10 +58,15 @@ int main() {
 	Led led_open(LED1_PIN);
 	Led led_status(LED2_PIN);
 
-	// TODO: becomes Controller::stop()
 	auto stop = [&]() {
 		stepper.off();
+		encoder.watchdog_stop();   // harmless if it is not running
 		dir = 0;
+	};
+
+	auto start_move = [&](int d) {
+		dir = d;
+		encoder.watchdog_start(MOVE_WD_MS);
 	};
 
 	// Maps door state to the three LEDs. Called every loop.
@@ -95,14 +110,16 @@ int main() {
 		}
 
 		if (sw1.pressed()) {
-			dir = door.next_direction(dir);
-			if (dir == 0) {
+			int d = door.next_direction(dir);
+			if (d == 0) {
 				stop();
+			} else {
+				start_move(d);
 			}
 		}
 
 		// 2. Encoder: always read, also when stopped (the belt coasts after a stop)
-		int ticks = encoder.read_ticks();
+		int ticks = encoder.read_ticks_watched();
 		if (ticks != 0) { door.on_movement(ticks); }
 
 		// 3. Limit switches
