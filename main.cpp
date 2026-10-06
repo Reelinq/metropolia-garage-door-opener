@@ -6,23 +6,16 @@
 #include "Button.h"
 #include "Led.h"
 #include "Eeprom.h"
-
+#include "Mqtt.h"
+#include "RemoteControl.h"
 
 #define EEPROM_SDA_PIN 16
 #define EEPROM_SCL_PIN 17
 #define EEPROM_I2C_ADDR 0x50
 
-static const char* state_name(DoorState s) {
-	switch (s) {
-		case DoorState::Closed: return "Closed";
-		case DoorState::Open: return "Open";
-		default: return "In between";
-	}
-}
-
 int main() {
 	stdio_init_all();
-	sleep_ms(2000); //NOTE: Maybe not needed
+	sleep_ms(2000); // Give the USB console time to connect, so boot messages are not lost
 
 	Stepper stepper(STEPPER_IN1_PIN, STEPPER_IN2_PIN, STEPPER_IN3_PIN, STEPPER_IN4_PIN);
 	RotaryEncoder encoder(ROT_A_PIN, ROT_B_PIN);
@@ -30,7 +23,9 @@ int main() {
 	LimitSwitch open_sw(OPEN_SW_PIN);
 	Door door;
 	Eeprom eeprom(i2c0, EEPROM_SDA_PIN, EEPROM_SCL_PIN, EEPROM_I2C_ADDR);
+	Mqtt mqtt(WIFI_SSID, WIFI_PASSWORD, BROKER_IP, BROKER_PORT);
 	Controller controller(door, stepper, encoder, closed_sw, open_sw, eeprom);
+	RemoteControl remote(mqtt, door, controller);
 
 	Button sw0(SW0_PIN);
 	Button sw1(SW1_PIN);
@@ -60,7 +55,6 @@ int main() {
 		led_status.update();
 	};
 
-	DoorState last_state = door.state();
 	update_leds();
 
 	while (true) {
@@ -75,14 +69,7 @@ int main() {
 		// Encoder, limit switches, motor step
 		controller.update();
 
-		// Report state changes, only when they happen
-		DoorState now = door.state();
-		if (now != last_state) {
-			printf("Door: %s\r\n", state_name(now));
-			last_state = now;
-		}
-
-		// TODO: Class Mqtt
+		remote.update();
 
 		update_leds();
 	}

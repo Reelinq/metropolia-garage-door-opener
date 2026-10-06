@@ -33,10 +33,21 @@ add_executable(${PROJECT_NAME}
 	logic/Controller.h
 	logic/DoorStorage.cpp
 	logic/DoorStorage.h
+	network/Mqtt.cpp
+	network/Mqtt.h
+	network/RemoteControl.cpp
+	network/RemoteControl.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	devices logic ${CMAKE_CURRENT_LIST_DIR}
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	WIFI_SSID="${WIFI_SSID}"
+	WIFI_PASSWORD="${WIFI_PASSWORD}"
+	BROKER_IP="${BROKER_IP}"
+	BROKER_PORT=${BROKER_PORT}
 )
 
 target_link_libraries(${PROJECT_NAME}
