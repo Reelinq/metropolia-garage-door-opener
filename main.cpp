@@ -5,15 +5,16 @@
 #include "RotaryEncoder.h"
 #include "LimitSwitch.h"
 #include "Door.h"
+#include "Controller.h"
 #include "Button.h"
-#include "led.h"
+#include "Led.h"
 
 #define LED0_PIN 20
 #define LED1_PIN 21
 #define LED2_PIN 22
 
-#define ROT_A_PIN 10
-#define ROT_B_PIN 11
+#define ROT_A_PIN 4
+#define ROT_B_PIN 5
 
 #define CLOSED_SW_PIN 27
 #define OPEN_SW_PIN 28
@@ -26,6 +27,14 @@
 #define STEPPER_IN2_PIN 3
 #define STEPPER_IN3_PIN 6
 #define STEPPER_IN4_PIN 13
+
+static const char* state_name(DoorState s) {
+	switch (s) {
+		case DoorState::Closed: return "Closed";
+		case DoorState::Open: return "Open";
+		default: return "In between";
+	}
+}
 
 int main() {
 	stdio_init_all();
@@ -66,6 +75,7 @@ int main() {
 		led_status.update();
 	};
 
+	DoorState last_state = door.state();
 	update_leds();
 
 	while (true) {

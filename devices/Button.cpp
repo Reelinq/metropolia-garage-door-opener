@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 
-#include "button.h"
+#include "Button.h"
 
 Button::Button(uint pin) : button_pin(pin) {
 	gpio_init(button_pin);

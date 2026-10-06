@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 
-#include "led.h"
+#include "Led.h"
 
 Led::Led(uint pin) : led_pin(pin) {
 	gpio_init(led_pin);
