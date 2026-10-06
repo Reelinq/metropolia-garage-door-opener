@@ -5,6 +5,7 @@
 #include "RotaryEncoder.h"
 #include "LimitSwitch.h"
 #include "Door.h"
+#include "Calibration.h"
 #include "Button.h"
 
 #define ROT_A_PIN 10
@@ -31,6 +32,7 @@ int main() {
 	LimitSwitch closed_sw(CLOSED_SW_PIN);
 	LimitSwitch open_sw(OPEN_SW_PIN);
 	Door door;
+	Calibration calibration(door, stepper, encoder, closed_sw, open_sw);
 	int dir = 0; // motor direction: +1 opening, -1 closing, 0 stopped
 
 	Button sw0(SW0_PIN);
@@ -47,8 +49,8 @@ int main() {
 		if (sw0.pressed_with(sw2)) {
 			stop();
 
-			// TODO: Class Calibration
 			printf("Calibration started\r\n");
+			calibration.run();
 		}
 
 		int ticks = encoder.read_ticks();
