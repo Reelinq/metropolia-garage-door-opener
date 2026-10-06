@@ -1,7 +1,3 @@
-#include <stdint.h>
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-
 #include "Button.h"
 
 Button::Button(uint pin) : button_pin(pin) {

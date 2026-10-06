@@ -4,14 +4,8 @@
 #include "Stepper.h"
 #include "RotaryEncoder.h"
 #include "LimitSwitch.h"
+#include "header.h"
 
-// Calibration: if the encoder gives no movement for this long while the motor
-// runs and the limit switch has not closed, the door is stuck (watchdog resets the chip).
-#define CALIBRATION_WD_MS 2000
-
-// Time for the belt to settle after the motor is switched off, before reading
-// the last encoder ticks.
-#define SETTLE_MS 100
 
 class Calibration {
 	public:

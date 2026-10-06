@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 add_executable(${PROJECT_NAME}
+	header.h
 	main.cpp
 	devices/Stepper.cpp
 	devices/Stepper.h
@@ -31,7 +32,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-	devices logic
+	devices logic ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}

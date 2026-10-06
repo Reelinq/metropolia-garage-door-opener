@@ -6,10 +6,6 @@
 #include "LimitSwitch.h"
 #include "Calibration.h"
 
-// Max time the motor may run without a single encoder tick before the door counts as stuck.
-// Moved here from main.cpp.
-#define MOVE_WD_MS 2000
-
 class Controller {
 	public:
 		Controller(Door& door, Stepper& stepper, RotaryEncoder& encoder,

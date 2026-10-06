@@ -1,4 +1,5 @@
 #pragma once
+#include "header.h"
 
 enum class DoorState { Closed, Open, InBetween };
 enum class DoorError { Normal, Stuck };

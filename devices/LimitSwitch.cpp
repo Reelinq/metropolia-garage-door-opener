@@ -1,6 +1,3 @@
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-
 #include "LimitSwitch.h"
 
 LimitSwitch::LimitSwitch(uint pin) : switch_pin(pin) {

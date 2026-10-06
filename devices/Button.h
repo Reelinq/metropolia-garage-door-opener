@@ -1,16 +1,5 @@
 #pragma once
-
-#include <stdint.h>
-#include "pico/stdlib.h"
-
-// Button pins (active low, internal pull-up)
-#define SW0_PIN 7
-#define SW1_PIN 8
-#define SW2_PIN 9
-
-// The pin is read at most once per this time. Works as the debounce,
-// like polling the pin every few milliseconds.
-#define BUTTON_POLL_MS 20
+#include "header.h"
 
 class Button {
 	public:

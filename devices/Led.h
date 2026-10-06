@@ -1,8 +1,5 @@
 #pragma once
-
-#include "pico/stdlib.h"
-
-#define LED_BLINK_MS 250 // time between toggles, so one full blink takes 500 ms
+#include "header.h"
 
 enum class LedMode { Off, On, Blink };
 

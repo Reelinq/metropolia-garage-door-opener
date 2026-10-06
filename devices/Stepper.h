@@ -1,18 +1,5 @@
 #pragma once
-
-#include "pico/stdlib.h"
-
-// Stepper motor driver pins (IN1..IN4)
-#define STEPPER_IN1_PIN 2
-#define STEPPER_IN2_PIN 3
-#define STEPPER_IN3_PIN 6
-#define STEPPER_IN4_PIN 13
-
-// Number of rows in the HALF_STEP table below.
-#define HALF_STEP_COUNT 8
-
-// Number of driver inputs (IN1..IN4), matching HALF_STEP table columns.
-#define MOTOR_PIN_COUNT 4
+#include "header.h"
 
 // Each row has MOTOR_PIN_COUNT columns (one for each pin).
 static const uint8_t HALF_STEP[HALF_STEP_COUNT][MOTOR_PIN_COUNT] = {

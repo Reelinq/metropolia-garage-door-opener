@@ -1,15 +1,5 @@
 #pragma once
-
-#include <stdint.h>
-#include "pico/stdlib.h"
-#include "pico/util/queue.h"
-
-
-// Marker written to watchdog scratch[0] while the motor is moving. If the chip
-// resets from the watchdog and this value is still there, the door was stuck.
-// Any value that is unlikely to appear by accident works (this one is "WDMV" in ASCII).
-#define WD_MOVING_MAGIC 0x57444D56u
-
+#include "header.h"
 
 class RotaryEncoder {
 	public:

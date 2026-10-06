@@ -1,7 +1,3 @@
-#include <stdint.h>
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-
 #include "Stepper.h"
 
 // Constructor: copies the pins into the object and sets them up.

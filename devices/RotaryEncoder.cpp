@@ -1,12 +1,5 @@
-#include <stdint.h>
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/watchdog.h"
-
 #include "RotaryEncoder.h"
 
-// Max ticks waiting between two read_ticks() calls (more are lost).
-#define ROT_QUEUE_SIZE 10
 
 // A static variable must be defined once, outside the class
 RotaryEncoder* RotaryEncoder::instance = nullptr;
