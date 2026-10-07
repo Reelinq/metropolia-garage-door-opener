@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
+file(GLOB MQTT_SOURCES "paho.mqtt.embedded-c/MQTTPacket/src/*.c")
+
 add_executable(${PROJECT_NAME}
 	header.h
 	main.cpp
@@ -35,12 +37,18 @@ add_executable(${PROJECT_NAME}
 	logic/DoorStorage.h
 	network/Mqtt.cpp
 	network/Mqtt.h
+    network/IPStack.cpp
+    network/IpStack.h
+    network/lwipopts.h
 	network/RemoteControl.cpp
 	network/RemoteControl.h
+    ${MQTT_SOURCES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-	devices logic ${CMAKE_CURRENT_LIST_DIR}
+    devices logic ${CMAKE_CURRENT_LIST_DIR}
+    paho.mqtt.embedded-c/MQTTPacket/src
+    paho.mqtt.embedded-c/MQTTClient/src
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -51,7 +59,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}
-	pico_stdlib pico_util hardware_gpio hardware_i2c
+	pico_stdlib pico_util hardware_gpio hardware_i2c pico_cyw43_arch_lwip_poll
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})
