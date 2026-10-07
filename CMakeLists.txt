@@ -14,43 +14,16 @@ pico_sdk_init()
 
 file(GLOB MQTT_SOURCES "paho.mqtt.embedded-c/MQTTPacket/src/*.c")
 
+file(GLOB_RECURSE SOURCES src/*.cpp)
+
 add_executable(${PROJECT_NAME}
-	header.h
 	main.cpp
-	devices/Stepper.cpp
-	devices/Stepper.h
-	devices/RotaryEncoder.cpp
-	devices/RotaryEncoder.h
-	devices/LimitSwitch.cpp
-	devices/LimitSwitch.h
-	devices/Led.cpp
-	devices/Led.h
-	devices/Button.cpp
-	devices/Button.h
-	devices/Eeprom.cpp
-	devices/Eeprom.h
-	logic/Door.cpp
-	logic/Door.h
-	logic/Calibration.cpp
-	logic/Calibration.h
-	logic/Controller.cpp
-	logic/Controller.h
-	logic/DoorStorage.cpp
-	logic/DoorStorage.h
-	network/Mqtt.cpp
-	network/Mqtt.h
-	network/IPStack.cpp
-	network/IPStack.h
-	network/lwipopts.h
-	network/RemoteControl.cpp
-	network/RemoteControl.h
-	network/Countdown.h
-	network/Countdown.cpp
+	${SOURCES}
 	${MQTT_SOURCES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-	devices logic network ${CMAKE_CURRENT_LIST_DIR}
+	src src/hardware src/door src/remote src/net
 	paho.mqtt.embedded-c/MQTTPacket/src
 	paho.mqtt.embedded-c/MQTTClient/src
 )

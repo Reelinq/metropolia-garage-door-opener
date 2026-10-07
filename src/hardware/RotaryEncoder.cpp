@@ -41,29 +41,26 @@ int RotaryEncoder::read_ticks() {
 
 void RotaryEncoder::watchdog_start(uint32_t timeout_ms) {
 	watchdog_hw->scratch[0] = WD_MOVING_MAGIC; // "reset while moving" = stuck
-	watchdog_enable(timeout_ms, true);         // true = pause while debugging
+	watchdog_enable(timeout_ms, true); // true = pause while debugging
 	wd_active = true;
 }
- 
+
 void RotaryEncoder::watchdog_stop() {
 	hw_clear_bits(&watchdog_hw->ctrl, WATCHDOG_CTRL_ENABLE_BITS);
 	watchdog_hw->scratch[0] = 0;
 	wd_active = false;
 }
- 
-bool RotaryEncoder::watchdog_running() const { return wd_active; }
- 
+
 int RotaryEncoder::read_ticks_watched() {
 	int ticks = read_ticks();
 	if (wd_active && ticks != 0) {
-		watchdog_update(); 
+		watchdog_update();
 	}
 	return ticks;
 }
- 
+
 bool RotaryEncoder::caused_stuck_reset() {
 	bool stuck = watchdog_enable_caused_reboot() && watchdog_hw->scratch[0] == WD_MOVING_MAGIC;
 	watchdog_hw->scratch[0] = 0;
 	return stuck;
 }
-

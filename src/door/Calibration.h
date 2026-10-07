@@ -4,7 +4,7 @@
 #include "Stepper.h"
 #include "RotaryEncoder.h"
 #include "LimitSwitch.h"
-#include "header.h"
+#include "Config.h"
 
 
 class Calibration {

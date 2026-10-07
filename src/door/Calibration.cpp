@@ -2,7 +2,6 @@
 #include "pico/stdlib.h"
 
 #include "Calibration.h"
-#include "Mqtt.h"
 
 Calibration::Calibration(Door& door, Stepper& stepper, RotaryEncoder& encoder,
 	const LimitSwitch& closed_sw, const LimitSwitch& open_sw)

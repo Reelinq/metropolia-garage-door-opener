@@ -1,12 +1,5 @@
 #pragma once
 
-#define MQTT_TOPIC_COMMAND "garage/door/command"
-#define MQTT_TOPIC_STATUS "garage/door/status"
-#define MQTT_TOPIC_RESPONSE "garage/door/response"
-
-#define BROKER_IP "10.161.4.63"
-#define BROKER_PORT 1883
-
 #include <stdio.h>
 #include <string.h>
 #include "pico/stdlib.h"
@@ -14,6 +7,7 @@
 #include "hardware/timer.h"
 #include "pico/cyw43_arch.h"
 
+#include "Config.h"
 #include "IPStack.h"
 #include "Countdown.h"
 #include "MQTTClient.h"

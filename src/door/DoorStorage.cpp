@@ -3,8 +3,6 @@
 
 #include "DoorStorage.h"
 
-#define STORAGE_RECORD_SIZE 6
-
 // Stored inverted, so a blank (0xFF) or all-zero EEPROM never passes
 static uint16_t check_value(uint16_t total, uint16_t pos) {
 	return (uint16_t)~(total + pos);
@@ -56,7 +54,7 @@ bool DoorStorage::load(Door& door) {
 	}
 
 	// total = 0 (saved as not calibrated) and pos > total are rejected by restore()
-	if (!door.restore(pos, total, 0)) {
+	if (!door.restore(pos, total)) {
 		printf("Storage: door was not calibrated\r\n");
 		return false;
 	}

@@ -1,5 +1,5 @@
 #pragma once
-#include "header.h"
+#include "Config.h"
 
 enum class DoorState { Closed, Open, InBetween };
 enum class DoorError { Normal, Stuck };
@@ -15,19 +15,18 @@ class Door {
 		int next_direction(int current_dir);
 
 		// Puts the door back into a calibrated state from saved data.
-		bool restore(int pos_in, int total_in, int dir_in);
+		bool restore(int pos_in, int total_in);
 
 		DoorState state() const;
 		DoorError error() const;
 		CalibrationState calibration() const;
 		int position() const;
 		int total_ticks() const;
-		int last_direction() const;
 
 	private:
 		int pos = 0;
 		int total = 0;
-		int last_dir = 0; // last direction the door was moving (+1 opening, -1 closing)
+		int last_dir = 0; // -1 = closing, +1 = opening, 0 = stopped
 		CalibrationState cal = CalibrationState::NotCalibrated;
 		DoorError err = DoorError::Normal;
 };

@@ -1,5 +1,3 @@
-#include "pico/stdlib.h"
-
 #include "Door.h"
 
 void Door::on_movement(int ticks) { pos += ticks; }
@@ -23,15 +21,14 @@ void Door::set_error(DoorError e) {
 	}
 }
 
-bool Door::restore(int pos_in, int total_in, int dir_in) {
+bool Door::restore(int pos_in, int total_in) {
 	// positive length, position inside the travel range, direction -1/0/+1
-	if (total_in <= 0 || pos_in < 0 || pos_in > total_in || dir_in < -1 || dir_in > 1) {
+	if (total_in <= 0 || pos_in < 0 || pos_in > total_in) {
 		return false;
 	}
 
 	set_calibrated(true, total_in);
 	pos = pos_in;
-	last_dir = dir_in;
 	return true;
 }
 
@@ -51,7 +48,7 @@ int Door::next_direction(int current_dir) {
 		case DoorState::Open:
 			last_dir = -1;
 			break;
-		default:                       // stopped midway: go the opposite way
+		default: // stopped midway: go the opposite way
 			last_dir = (last_dir == 0) ? +1 : -last_dir;
 			break;
 	}
@@ -76,4 +73,3 @@ DoorError Door::error() const { return err; }
 CalibrationState Door::calibration() const { return cal; }
 int Door::position() const { return pos; }
 int Door::total_ticks() const { return total; }
-int Door::last_direction() const { return last_dir; }

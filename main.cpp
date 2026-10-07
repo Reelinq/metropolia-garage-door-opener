@@ -9,10 +9,6 @@
 #include "Mqtt.h"
 #include "RemoteControl.h"
 
-#define EEPROM_SDA_PIN 16
-#define EEPROM_SCL_PIN 17
-#define EEPROM_I2C_ADDR 0x50
-
 int main() {
 	stdio_init_all();
 	sleep_ms(2000); // Give the USB console time to connect, so boot messages are not lost

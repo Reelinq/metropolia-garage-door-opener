@@ -58,7 +58,7 @@ bool Mqtt::init() {
 		return false;
 	}
 
-	printf("MQTT connected 555\n");
+	printf("MQTT connected\n");
 	return true;
 }
 
@@ -86,7 +86,7 @@ bool Mqtt::publish(const char* topic, const char* msg) {
 	message.qos = MQTT::QOS1;
 	message.payloadlen = strlen(msg);
 	rc = client.publish(topic, message);
-	printf("Publish rc=%d\n", rc);
+	if (rc != 0) { printf("Publish failed rc=%d\n", rc); }
 
 	return rc == 0;
 }

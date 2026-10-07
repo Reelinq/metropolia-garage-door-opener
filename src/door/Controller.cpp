@@ -1,5 +1,4 @@
 #include "Controller.h"
-#include "Mqtt.h"
 
 Controller::Controller(Door& door, Stepper& stepper, RotaryEncoder& encoder,
 	const LimitSwitch& closed_sw, const LimitSwitch& open_sw, Eeprom& eeprom)

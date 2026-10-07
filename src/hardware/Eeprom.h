@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-#include "header.h"
+#include "Config.h"
 
 class Eeprom {
 	public:
