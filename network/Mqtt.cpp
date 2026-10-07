@@ -11,6 +11,8 @@ void Mqtt::messageArrived(MQTT::MessageData &md) {
 	memcpy(received, message.payload, n);
 	received[n] = '\0';
 	has_msg = true;
+
+	printf("Received: %s\n", received);
 }
 
 Mqtt::Mqtt(const char * ssid, const char * pw, const char * ip, int port) :
@@ -32,29 +34,32 @@ bool Mqtt::init() {
 		printf("Wi-Fi not up, retrying\n");
 		cyw43_arch_wifi_connect_timeout_ms(ssid, pw, CYW43_AUTH_WPA2_AES_PSK, 10000);
 	}
-	rc = ipstack.connect(ip, port);
-	if (rc != 0) {
-		printf("rc from TCP connect is %d\n", rc);
-		return false;
-	}
-	// tcp_connect is asynchronous: let the handshake finish before sending CONNECT
-	for (int i = 0; i < 300; i++) {
-		cyw43_arch_poll();
-		sleep_ms(1);
-	}
 
-	printf("MQTT connecting\n");
 	data.MQTTVersion = 3;
 	data.clientID.cstring = (char *) "PicoW";
-	rc = client.connect(data);
+
+	for (int attempt = 1; attempt <= 5; attempt++) {
+		if (attempt > 1) { ipstack.disconnect(); } // drop the failed socket
+		printf("MQTT connecting, attempt %d\n", attempt);
+		rc = ipstack.connect(ip, port);
+		if (rc == 0) {
+			// tcp_connect is asynchronous: let the handshake finish before sending CONNECT
+			for (int i = 0; i < 500; i++) {
+				cyw43_arch_poll();
+				sleep_ms(1);
+			}
+			rc = client.connect(data);
+			if (rc == 0) { break; }
+		}
+		printf("Attempt %d failed, rc %d\n", attempt, rc);
+		sleep_ms(1000);
+	}
 	if (rc != 0) {
-			printf("rc from MQTT connect is %d\n", rc);
-		printf("Attempt to connect failed");
 		return false;
 	}
+
 	printf("MQTT connected 555\n");
 	return true;
-
 }
 
 //subscribes to topic
@@ -90,7 +95,14 @@ bool Mqtt::publish(const char* topic, const char* msg) {
 const char* Mqtt::checkMsg() {
 	if (!client.isConnected()) { return nullptr; }
 	cyw43_arch_poll();
-	client.yield(1);
+
+	static uint32_t last_ms = 0;
+	uint32_t now = to_ms_since_boot(get_absolute_time());
+	if (now - last_ms >= 20) {
+		last_ms = now;
+		client.yield(1);
+	}
+
 	if (!has_msg) { return nullptr; }
 	has_msg = false;
 	return received;

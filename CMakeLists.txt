@@ -56,8 +56,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-	WIFI_SSID=\"Brain\"
-	WIFI_PASSWORD=\"88888888\"
+	WIFI_SSID=\"$ENV{WIFI_SSID}\"
+	WIFI_PASSWORD=\"$ENV{WIFI_PASSWORD}\"
 )
 
 target_link_libraries(${PROJECT_NAME}
