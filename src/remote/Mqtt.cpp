@@ -75,7 +75,9 @@ bool Mqtt::subscribe(const char* topic) {
 
 //publishes to topic (you dont need to subscribe to topic to publish in it)
 bool Mqtt::publish(const char* topic, const char* msg) {
-	if (!client.isConnected()) {
+	static uint32_t retry_ms = 0;
+	uint32_t now = to_ms_since_boot(get_absolute_time());
+	if (!client.isConnected() || now < retry_ms) {
 		return false;
 	}
 
@@ -86,6 +88,7 @@ bool Mqtt::publish(const char* topic, const char* msg) {
 	message.qos = MQTT::QOS1;
 	message.payloadlen = strlen(msg);
 	rc = client.publish(topic, message);
+	if (rc != 0) { retry_ms = now + 5000; } // dead broker costs one timeout, not one per loop
 	if (rc != 0) { printf("Publish failed rc=%d\n", rc); }
 
 	return rc == 0;

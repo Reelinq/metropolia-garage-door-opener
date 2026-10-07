@@ -105,13 +105,8 @@ static const uint8_t HALF_STEP[HALF_STEP_COUNT][MOTOR_PIN_COUNT] = {
 #define EEPROM_PAGE_SIZE 64
 #define EEPROM_MAX_WRITE 32
 #define EEPROM_WRITE_MS 5
-
-
-
-// ---------- Storage defines ----------
-
-#define STORAGE_ADDR 0x0000 // 6 bytes, fits inside page 0
-#define STORAGE_RECORD_SIZE 6
+#define STORAGE_ADDR 0x0000 // 8 bytes, fits inside page 0
+#define STORAGE_RECORD_SIZE 8
 
 
 

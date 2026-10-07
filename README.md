@@ -222,13 +222,14 @@ A successful calibration clears the error.
 
 ### EEPROM Layout
 
-The state of the door is saved as a 6-byte record at `STORAGE_ADDR` (defined in `Config.h`). Values are stored big-endian with an inverted checksum, so a blank or all-zero EEPROM is never accepted.
+The state of the door is saved as a 8-byte record at `STORAGE_ADDR` (defined in `Config.h`). Values are stored big-endian with an inverted checksum, so a blank or all-zero EEPROM is never accepted.
 
 | Offset | Size | Contents |
 |---|---|---|
 | +0 | 2 bytes | Length of the travel in encoder ticks (0 = not calibrated) |
 | +2 | 2 bytes | Door position in ticks |
-| +4 | 2 bytes | Check value: `~(length + position)` |
+| +4 | 2 bytes | Direction of the last movement, stored as direction + 1 (0 = closing, 1 = none, 2 = opening) |
+| +6 | 2 bytes | Check value: `~(length + position + direction)` |
 
 The record is saved after every calibration and every time the motor stops. If the check fails, the door starts as not calibrated.
 
@@ -241,7 +242,7 @@ The record is saved after every calibration and every time the motor stops. If t
 | Calibrating | The previous calibration is restored, or the door stays not calibrated if there was none |
 | Stuck | Door is not calibrated, the error is reported again after the reboot |
 
-The direction of the last movement is not saved. After a reboot, a door that is halfway starts by opening.
+The direction of the last movement is saved too, so a door stopped halfway still moves in the opposite direction after a reboot.
 
 ### MQTT
 

@@ -21,7 +21,6 @@ int main() {
 	Eeprom eeprom(i2c0, EEPROM_SDA_PIN, EEPROM_SCL_PIN, EEPROM_I2C_ADDR);
 	Mqtt mqtt(WIFI_SSID, WIFI_PASSWORD, BROKER_IP, BROKER_PORT);
 	Controller controller(door, stepper, encoder, closed_sw, open_sw, eeprom);
-	RemoteControl remote(mqtt, door, controller);
 
 	Button sw0(SW0_PIN);
 	Button sw1(SW1_PIN);
@@ -50,6 +49,9 @@ int main() {
 		led_open.update();
 		led_status.update();
 	};
+
+	update_leds(); // Update LEDs to reflect initial state. Do this before the remote control.
+	RemoteControl remote(mqtt, door, controller);
 
 	while (true) {
 		// Buttons
