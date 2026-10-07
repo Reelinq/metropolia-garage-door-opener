@@ -28,9 +28,9 @@ Mqtt::Mqtt(const char * ssid, const char * pw, const char * ip, int port) :
 // initalises the program, must be run before any other mqtt method, returns true if works
 bool Mqtt::init() {
 	// wait for Wi-Fi + DHCP lease, connecting earlier gives ERR_RTE (-4)
-	for (int i = 0; i < 100 && cyw43_tbl_link_status(&cyw43_state, CYW43_ITF_STA) != CYW43_LINK_UP; i++) {
-		cyw43_arch_poll();
-		sleep_ms(100);
+	for (int i = 0; i < 3 && cyw43_tcpip_link_status(&cyw43_state, CYW43_ITF_STA) != CYW43_LINK_UP; i++) {
+		printf("Wi-Fi not up, retrying\n");
+		cyw43_arch_wifi_connect_timeout_ms(ssid, pw, CYW43_AUTH_WPA2_AES_PSK, 10000);
 	}
 	rc = ipstack.connect(ip, port);
 	if (rc != 0) {
