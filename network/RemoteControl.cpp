@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Mqtt.h"
 #include "RemoteControl.h"
 
 static const char* state_name(DoorState s) {
@@ -8,20 +9,19 @@ static const char* state_name(DoorState s) {
 }
 
 RemoteControl::RemoteControl(Mqtt& mqtt, const Door& door, Controller& controller)
-	: mqtt(mqtt), door(door), controller(controller) {}
+	: mqtt(mqtt), door(door), controller(controller) {
+	if (mqtt.init()) { mqtt.subscribe(MQTT_TOPIC_COMMAND); }
+}
 
 void RemoteControl::update() {
-	mqtt.update();
 	handle_command();
 	publish_status();
 }
 
 // Same operations as the local buttons: calibrate (SW0+SW2) and toggle (SW1)
 void RemoteControl::handle_command() {
-	char cmd[32];
-	if (!mqtt.get_command(cmd, sizeof(cmd))) {
-		return;
-	}
+	const char* cmd = mqtt.checkMsg(); // also keeps the connection alive
+	if (!cmd) { return; }
 
 	const char* err = nullptr;
 	if (strcmp(cmd, "calibrate") == 0) {
@@ -37,17 +37,20 @@ void RemoteControl::handle_command() {
 	}
 
 	char resp[64];
-	if (err) {
-		snprintf(resp, sizeof(resp), "{\"error\":\"%s\"}", err);
-	} else {
-		snprintf(resp, sizeof(resp), "{\"result\":\"ok\"}");
-	}
+	snprintf(resp, sizeof(resp), err ? "{\"error\":\"%s\"}" : "{\"result\":\"ok\"}", err);
 	mqtt.publish(MQTT_TOPIC_RESPONSE, resp);
 }
 
 // Publishes door state, error state and calibration state in one message,
 // only when it differs from the last successfully published one.
 void RemoteControl::publish_status() {
+	static DoorState last_state = DoorState::InBetween;
+	DoorState now = door.state();
+	if (now != last_state) {
+		printf("Door: %s\r\n", state_name(now));
+		last_state = now;
+	}
+
 	char msg[sizeof(last_status)];
 	snprintf(msg, sizeof(msg),
 		"{\"door\":\"%s\",\"error\":\"%s\",\"calibration\":\"%s\"}",

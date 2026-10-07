@@ -12,7 +12,7 @@ Controller::Controller(Door& door, Stepper& stepper, RotaryEncoder& encoder,
 	if (encoder.caused_stuck_reset()) {
 		door.set_error(DoorError::Stuck); // also sets "not calibrated"
 		storage.save(door);
-		printmq("Stuck reset detected\r\n");
+		printf("Stuck reset detected\r\n");
 	}
 }
 

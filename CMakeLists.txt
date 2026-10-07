@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
+set(PICO_BOARD pico_w)
+
 # Include build functions from Pico SDK
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
@@ -37,29 +39,30 @@ add_executable(${PROJECT_NAME}
 	logic/DoorStorage.h
 	network/Mqtt.cpp
 	network/Mqtt.h
-    network/IPStack.cpp
-    network/IpStack.h
-    network/lwipopts.h
+	network/IPStack.cpp
+	network/IPStack.h
+	network/lwipopts.h
 	network/RemoteControl.cpp
 	network/RemoteControl.h
-    ${MQTT_SOURCES}
+	network/Countdown.h
+	network/Countdown.cpp
+	${MQTT_SOURCES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-    devices logic ${CMAKE_CURRENT_LIST_DIR}
-    paho.mqtt.embedded-c/MQTTPacket/src
-    paho.mqtt.embedded-c/MQTTClient/src
+	devices logic network ${CMAKE_CURRENT_LIST_DIR}
+	paho.mqtt.embedded-c/MQTTPacket/src
+	paho.mqtt.embedded-c/MQTTClient/src
 )
 
-target_compile_definitions(${ProjectName} PRIVATE
-
-WIFI_SSID=\"$ENV{WIFI_SSID}\"
-WIFI_PASSWORD=\"$ENV{WIFI_PASSWORD}\"
-
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	WIFI_SSID=\"Brain\"
+	WIFI_PASSWORD=\"88888888\"
 )
 
 target_link_libraries(${PROJECT_NAME}
-	pico_stdlib pico_util hardware_gpio hardware_i2c pico_cyw43_arch_lwip_poll
+	pico_stdlib pico_util hardware_gpio hardware_i2c hardware_watchdog
+	pico_cyw43_arch_lwip_poll
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})

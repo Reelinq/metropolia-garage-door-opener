@@ -55,8 +55,6 @@ int main() {
 		led_status.update();
 	};
 
-	update_leds();
-
 	while (true) {
 		// Buttons
 		if (sw0.pressed_with(sw2)) {

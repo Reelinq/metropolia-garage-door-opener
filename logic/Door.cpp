@@ -24,14 +24,9 @@ void Door::set_error(DoorError e) {
 }
 
 bool Door::restore(int pos_in, int total_in, int dir_in) {
-	if (total_in <= 0) {
-		return false; // a calibrated door has a positive length
-	}
-	if (pos_in < 0 || pos_in > total_in) {
-		return false; // position must be inside the travel range
-	}
-	if (dir_in < -1 || dir_in > 1) {
-		return false; // only -1, 0, +1 are directions
+	// positive length, position inside the travel range, direction -1/0/+1
+	if (total_in <= 0 || pos_in < 0 || pos_in > total_in || dir_in < -1 || dir_in > 1) {
+		return false;
 	}
 
 	set_calibrated(true, total_in);
@@ -42,11 +37,11 @@ bool Door::restore(int pos_in, int total_in, int dir_in) {
 
 int Door::next_direction(int current_dir) {
 	if (cal != CalibrationState::Calibrated) {
-		return 0;                      
+		return 0;
 	}
 	if (current_dir != 0) {
-		last_dir = current_dir;        // remember which way it was going
-		return 0;                      // moving -> stop
+		last_dir = current_dir; // remember which way it was going
+		return 0; // moving -> stop
 	}
 
 	switch (state()) {
