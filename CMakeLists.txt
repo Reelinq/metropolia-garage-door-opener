@@ -51,11 +51,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     paho.mqtt.embedded-c/MQTTClient/src
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-	WIFI_SSID="${WIFI_SSID}"
-	WIFI_PASSWORD="${WIFI_PASSWORD}"
-	BROKER_IP="${BROKER_IP}"
-	BROKER_PORT=${BROKER_PORT}
+target_compile_definitions(${ProjectName} PRIVATE
+
+WIFI_SSID=\"$ENV{WIFI_SSID}\"
+WIFI_PASSWORD=\"$ENV{WIFI_PASSWORD}\"
+
 )
 
 target_link_libraries(${PROJECT_NAME}
