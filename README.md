@@ -321,6 +321,8 @@ garage-door-opener/
 | `Controller` | Combines motor, encoder and switches. Starts, stops and toggles the door |
 | `Mqtt` | MQTT connection, subscription and publishing |
 | `RemoteControl` | Executes remote commands and publishes the status |
+| `StatusLeds` | Shows the door, calibration and error state on the three LEDs |
+| `System` | Creates and connects all the objects of the application |
 
 ---
 
