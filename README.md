@@ -299,7 +299,7 @@ mosquitto_pub -h <broker_ip> -t garage/door/command -m toggle
 garage-door-opener/
 ├── CMakeLists.txt
 ├── main.cpp
-├── paho.mqtt.embedded-c/
+├── paho.mqtt.embedded-c/        Folder from course template
 └── src/
     ├── Config.h
     ├── hardware/   Stepper, RotaryEncoder, LimitSwitch, Led, Button, Eeprom
